@@ -10,15 +10,24 @@ export interface CategoryEntry {
 export default class WordGenerator{
 
 	private categoryData: CategoryEntry[] = []
+	private categoryMap: Map<string, number> = new Map();
+
 
 	public constructor(categories: string[]){
-		categories.forEach(category => {
+		categories.forEach((category, index) => {
 			this.parseCategory(category)
+			this.categoryMap.set(category, index);
 		})
 	}
 	
 	public getData(): CategoryEntry[]{
 		return this.categoryData;
+	}
+	
+	public getCategory(categoryName: string): CategoryEntry {
+			let idx = this.categoryMap.get(categoryName);
+			if(idx !== undefined) return this.categoryData[idx]
+			throw new TypeError("No such category");
 	}
 
 	private parseCategory(categoryName: string){
