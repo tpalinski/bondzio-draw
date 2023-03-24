@@ -30,6 +30,12 @@ export default class WordGenerator{
 			throw new TypeError("No such category");
 	}
 
+	public getRandomWord(category: string) {
+		let dict = this.getCategory(category).content
+		let idx = Math.floor(Math.random() * (dict.length - 1))
+		return dict[idx]
+	}
+
 	private parseCategory(categoryName: string){
 		// Look for categoryName.json file in categories directory
 		let data = fs.readFileSync(path.resolve(__dirname, '..', 'categories', categoryName + '.json'))
