@@ -1,4 +1,6 @@
 import fs from 'fs'
+import path from 'path'
+
 
 export interface CategoryEntry {
 	name: string,
@@ -10,18 +12,21 @@ export default class WordGenerator{
 	private categoryData: CategoryEntry[] = []
 
 	public constructor(categories: string[]){
-		
+		categories.forEach(category => {
+			this.parseCategory(category)
+		})
 	}
 	
+	public getData(): CategoryEntry[]{
+		return this.categoryData;
+	}
+
 	private parseCategory(categoryName: string){
 		// Look for categoryName.json file in categories directory
-		fs.readFile('../categories/' + categoryName + '.json', (err, data) => {
-			if (err) throw err;
-			//@ts-expect-error
-			let categoryData = JSON.parse(data);
-			this.categoryData.push(WordGenerator.validateJson(categoryData))
-			
-		})
+		let data = fs.readFileSync(path.resolve(__dirname, '..', 'categories', categoryName + '.json'))
+		 //@ts-expect-error
+		 let categoryData = JSON.parse(data);
+		 this.categoryData.push(WordGenerator.validateJson(categoryData))
 	}
 
 	private static validateJson(json: Object): CategoryEntry {
