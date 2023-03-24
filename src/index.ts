@@ -19,5 +19,9 @@ io.on("connection", (socket) => {
 		socket.emit("room-confirm", userMap.get(socket.id))
 		console.log(`New client: ${data.nickname} joined room: ${data.room}`)
 	})
+
+	socket.once("disconnect", () => {
+		userMap.delete(socket.id)
+	})
 })
 
