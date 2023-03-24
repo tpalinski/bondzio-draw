@@ -1,6 +1,16 @@
-import socketio from 'socket.io'
+import {Server}from 'socket.io'
 import WordGenerator from './words'
 
+const io = new Server(3001)
+
 let gen = new WordGenerator(['fruits', 'people', 'music']);
-console.log(gen.getRandomWord('fruits'))
-console.log(gen.getRandomWord('people'))
+
+io.on("connection", (socket) => {
+	socket.emit("Connected to the server successfully");
+
+
+	io.on("join-room", (data) => {
+		console.log(data)
+	})
+})
+
