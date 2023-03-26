@@ -1,6 +1,6 @@
 import {Server}from 'socket.io'
 import WordGenerator from './words'
-import { RoomConnectionData } from './types';
+import { Message, RoomConnectionData } from './types';
 
 const io = new Server(3001)
 
@@ -20,8 +20,16 @@ io.on("connection", (socket) => {
 		console.log(`New client: ${data.nickname} joined room: ${data.room}`)
 	})
 
+	socket.on("send-message", (msg: Message) => {
+		console.log(`Sending message: ${msg.content}`)
+		socket.rooms.forEach((room) => {
+			socket.to(room).emit("receive-message", msg)
+		})
+	})
+
 	socket.once("disconnect", () => {
 		userMap.delete(socket.id)
+		console.log(`Disconnected user: ${socket.id}`)
 	})
 })
 
