@@ -2,7 +2,11 @@ import {Server}from 'socket.io'
 import WordGenerator from './words'
 import { DrawCoords, Message, RoomConnectionData } from './types';
 
-const io = new Server(3001)
+const io = new Server(3001, {
+	cors: {
+		origin: "*"
+	}
+})
 
 let gen = new WordGenerator(['fruits', 'people', 'music']);
 
