@@ -51,7 +51,9 @@ io.on("connection", (socket) => {
 
 	socket.on("generate-new-word", (category: string) => {
 		try {
+			let room = [...socket.rooms][1];
 			var word = gen.getRandomWord(category)
+			roomsMap.set(room, word);
 			socket.emit("new-word", word);
 		} catch(e) {
 			console.log(e)
